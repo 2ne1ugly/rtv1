@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 16:33:01 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 11:49:54 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/03 16:02:46 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void		hook_functions(t_app *app)
 //	mlx_hook(app->wnd_handle, 4, 0, app_mouse_press, app);
 //	mlx_hook(app->wnd_handle, 5, 0, app_mouse_release, app);
 //	mlx_hook(app->wnd_handle, 6, 0, app_mouse_move, app);
+	mlx_hook(app->wnd_handle, 2, 0, key_event, app);
 	mlx_loop_hook(app->mlx_handle, app_looper, app);
 }
 

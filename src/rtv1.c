@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 15:00:52 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/03 16:02:09 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,20 @@ void	add_scene_sphere(t_app *app, t_vec *pos, t_vec *rot, double radius)
 	new->ray_to_obj = ray_to_sphere;
 }
 
+void	add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, t_vec *norm)
+{
+	t_obj		*new;
+	t_plane		*plane;
+
+	new = add_scene_obj(app);
+	plane = malloc(sizeof(t_plane));
+	plane->pos = *pos;
+	plane->normal = *norm;
+	plane->rot = *rot;
+	new->obj = plane;
+	new->ray_to_obj = ray_to_plane;
+}
+
 int	main(void)
 {
 	t_app		*app;
@@ -64,15 +78,12 @@ int	main(void)
 	sphere = app->scene.objects->obj;
 	sphere->pos = (t_vec){0, 0, 0, 1};
 	sphere->radius = 0.5;*/
-	add_scene_sphere(app, &(t_vec){-1, 0, 2, 1}, &(t_vec){0, 0, 0, 1}, .5);
-	add_scene_sphere(app, &(t_vec){1, 0, 0, 1}, &(t_vec){0, 0, 0, 1}, .5);
-	add_scene_sphere(app, &(t_vec){0, 1, 0, 1}, &(t_vec){0, 0, 0, 1}, .5);
-	add_scene_sphere(app, &(t_vec){0, -1, 0, 1}, &(t_vec){0, 0, 0, 1}, .5);
-	add_scene_sphere(app, &(t_vec){-2, 0, 0, 1}, &(t_vec){0, 0, 0, 1}, .5);
+	add_scene_sphere(app, &(t_vec){1, -1, 2, 1}, &(t_vec){0, 0, 0, 1}, .5);
+	//add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 0, 0, 1}, &(t_vec){0, 1, 0, 1});
 
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;
-	light->pos = (t_vec){2, -2, -2, 1};
+	light->pos = (t_vec){0, 0, 0, 1};
 	light->next = NULL;
 	shoot_rays(app);
 	mlx_loop(app->mlx_handle);

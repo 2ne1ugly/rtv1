@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:31:14 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 14:59:28 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/03 15:58:36 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void		set_rays(t_app *app)
 	ray.pos = app->cam.pos;
 	min = vec_mul(app->cam.dir, app->cam.near);
 	step = vec_abs(&min) * tan(app->cam.fov / 2.0);
-	min = vec_sub(&min, vec_mul(app->cam.x_axis, step));
-	min = vec_sub(&min, vec_mul(app->cam.y_axis, step * app->aspect));
+	min = vec_add(&min, vec_mul(app->cam.x_axis, step));
+	min = vec_add(&min, vec_mul(app->cam.y_axis, step * app->aspect));
 	step /= app->height / 2;
 	i = -1;
 	while (++i < app->height)
@@ -36,8 +36,8 @@ void		set_rays(t_app *app)
 		j = -1;
 		while (++j < app->width)
 		{
-			ray.dir = vec_add(&min, vec_mul(app->cam.y_axis, i * step));
-			ray.dir = vec_add(&ray.dir, vec_mul(app->cam.x_axis,
+			ray.dir = vec_sub(&min, vec_mul(app->cam.y_axis, i * step));
+			ray.dir = vec_sub(&ray.dir, vec_mul(app->cam.x_axis,
 			j * step * app->aspect));
 			ray.dir = vec_norm(&ray.dir);
 			app->screen_ray[i][j] = ray;

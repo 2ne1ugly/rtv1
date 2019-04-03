@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 10:14:10 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/03 15:12:32 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,4 +161,7 @@ void			set_basis(t_cam *cam);
 
 double			ray_to_plane(t_ray *ray, void *obj, t_intersect *out);
 double			ray_to_sphere(t_ray *ray, void *obj, t_intersect *out);
+
+int				key_event(int keycode, void *ptr);
+
 #endif
