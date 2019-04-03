@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/02 21:42:29 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/03 11:50:13 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	main(void)
 {
 	t_app		*app;
 	t_sphere	*sphere;
+	t_light		*light;
 
 	if (!init_app(&app))
 		return (0);
@@ -30,6 +31,11 @@ int	main(void)
 	sphere = app->scene.objects->obj;
 	sphere->pos = (t_vec){0, 0, 0, 1};
 	sphere->radius = 0.5;
+
+	app->scene.lights = malloc(sizeof(t_light));
+	light = app->scene.lights;
+	light->pos = (t_vec){2, -2, -2, 1};
+	light->next = NULL;
 	shoot_rays(app);
 	mlx_loop(app->mlx_handle);
 	return (0);

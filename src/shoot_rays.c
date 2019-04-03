@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:31:14 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/02 21:51:33 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/03 11:54:21 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,30 @@ void		set_rays(t_app *app)
 	}
 }
 
-t_intersect	*check_intersect(t_ray *ray, t_obj *obj)
+double		check_intersect(t_ray *ray, t_obj *obj, t_light *light)
 {
 	t_obj		*curr;
 	t_intersect *point;
+	t_vec		point_to_light;
+	t_vec		reflection;
 
 	point = malloc(sizeof(t_intersect));
 	curr = obj;
 	while (curr != NULL)
 	{
 		if (curr->ray_to_obj(ray, curr->obj, point) != 0)
-			return (point);
+		{
+			point_to_light = vec_sub(&light->pos, point->pos);
+			point_to_light = vec_norm(&point_to_light);
+			reflection = vec_sub(&ray->dir, vec_mul(point->normal, 2 * vec_dot(&ray->dir, &point->normal)));
+			reflection = vec_norm(&reflection);
+			free(point);
+			return (MAX(vec_dot(&reflection, &point_to_light), 0));
+		}
 		curr = curr->next;
 	}
 	free(point);
-	return (NULL);
+	return (-1);
 }
 
 void		shoot_rays(t_app *app)
@@ -67,7 +76,8 @@ void		shoot_rays(t_app *app)
 	int			i;
 	int			j;
 	t_ray		ray;
-	t_intersect	*point;
+	double		color;
+	int			val;
 
 	i = 0;
 	while (i < app->height)
@@ -76,14 +86,16 @@ void		shoot_rays(t_app *app)
 		while (j < app->width)
 		{
 			ray = app->screen_ray[i][j];
-			point = check_intersect(&ray, app->scene.objects);
-			if (point != NULL)
+			color = check_intersect(&ray, app->scene.objects, app->scene.lights);
+			if (color == -1)
 			{
-				img_pixel_put(app, j, i, 0x00FF00);
-				free(point);
+				img_pixel_put(app, j, i, 0x888888);
 			}
 			else
-				img_pixel_put(app, j, i, 0x888888);
+			{
+				val = color * 0xFF;
+				img_pixel_put(app, j, i, val << 8);
+			}
 			j++;
 		}
 		i++;
