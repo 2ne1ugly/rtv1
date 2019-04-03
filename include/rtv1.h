@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/02 21:45:40 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/03 10:14:10 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,8 @@ typedef struct	s_cylinder
 
 typedef struct	s_light
 {
-	t_vec	pos;
+	t_vec			pos;
+	struct s_light	*next;
 }				t_light;
 
 typedef struct	s_obj
