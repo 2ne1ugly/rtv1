@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 16:33:01 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 13:59:07 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 15:47:49 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int			init_app(t_app **app)
 	init_img(*app);
 	init_screen_ray(*app);
 	(*app)->cam.dir = (t_vec){0, 0, 1, 0};
-	(*app)->cam.pos = (t_vec){0, 0, -2, 1};
+	(*app)->cam.pos = (t_vec){0, 0, -2.5, 1};
 	(*app)->cam.fov = PI / 2;
 	(*app)->cam.near = 0.1;
 	hook_functions(*app);

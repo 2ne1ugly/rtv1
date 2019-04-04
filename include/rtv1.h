@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 10:45:34 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 15:22:11 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,7 @@ typedef struct	s_img
 }				t_img;
 
 //	All normals and directions has to be normalized.
-typedef struct	s_intersect
-{
-	t_vec	pos;
-	t_vec	normal;
-	double	dist;
-}				t_intersect;
+
 
 typedef struct	s_sphere
 {
@@ -125,10 +120,20 @@ typedef struct	s_light
 	struct s_light	*next;
 }				t_light;
 
+typedef struct	s_obj t_obj;
+
+typedef struct	s_intersect
+{
+	t_vec	pos;
+	t_vec	normal;
+	double	dist;
+	t_obj	*obj;
+}				t_intersect;
+
 typedef struct	s_obj
 {
 	void			*obj;
-	double			(*ray_to_obj)(t_ray *, void *, t_intersect *);
+	double			(*ray_to_obj)(t_ray *, t_obj *, t_intersect *);
 	int				color;
 	struct s_obj	*next;
 }				t_obj;
@@ -165,15 +170,16 @@ t_vec			vec_mul(t_vec lhs, double rhs);
 t_vec			vec_add(t_vec *lhs, t_vec rhs);
 t_vec			vec_sub(t_vec *lhs, t_vec rhs);
 double			vec_dot2(t_vec *lhs);
+t_vec			vec_rflct(t_vec *inc, t_vec *norm);
 
 void			set_rays(t_app *app);
 void			shoot_rays(t_app *app);
 void			set_basis(t_cam *cam);
 
-double			ray_to_plane(t_ray *ray, void *obj, t_intersect *out);
-double			ray_to_sphere(t_ray *ray, void *obj, t_intersect *out);
-double			ray_to_cylinder(t_ray *ray, void *obj, t_intersect *out);
-double			ray_to_cone(t_ray *ray, void *obj, t_intersect *out);
+double			ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out);
+double			ray_to_sphere(t_ray *ray, t_obj *obj, t_intersect *out);
+double			ray_to_cylinder(t_ray *ray, t_obj *obj, t_intersect *out);
+double			ray_to_cone(t_ray *ray, t_obj *obj, t_intersect *out);
 
 int				key_event(int keycode, void *ptr);
 

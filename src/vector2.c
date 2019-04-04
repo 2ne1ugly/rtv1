@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 04:28:48 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 11:46:13 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 15:26:01 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,13 @@ double		vec_dot2(t_vec *lhs)
 	val += lhs->y * lhs->y;
 	val += lhs->z * lhs->z;
 	return (val);
+}
+
+t_vec		vec_rflct(t_vec *inc, t_vec *norm)
+{
+	t_vec	reflection;
+
+	reflection = vec_sub(inc, vec_mul(*norm, 2 * vec_dot(inc, norm)));
+	reflection = vec_norm(&reflection);
+	return (reflection);
 }

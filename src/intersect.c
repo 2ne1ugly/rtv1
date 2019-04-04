@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:45:40 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 10:25:02 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 14:30:39 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
 //if col is NULL, it only returns dist or 0 (if no intersection)
-double	ray_to_plane(t_ray *ray, void *obj, t_intersect *out)
+double	ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out)
 {
 	double	denom;
 	double	t;
 	t_vec	temp;
 	t_plane	*plane;
 
-	plane = obj;
+	plane = obj->obj;
 	denom = vec_dot(&ray->dir, &plane->normal);
 	if (fabs(denom) > 0.0001)
 	{
@@ -33,6 +33,7 @@ double	ray_to_plane(t_ray *ray, void *obj, t_intersect *out)
 			out->pos = vec_add(&ray->pos, vec_mul(ray->dir, t));
 			out->normal = plane->normal;
 			out->dist = t;
+			out->obj = obj;
 		}
 		return (t);
 	}
@@ -63,7 +64,7 @@ int 	solv_quad(t_vec *i, double *x0, double *x1)
 }
 
 //if ray is inside the sphere, it will work oddly
-double	ray_to_sphere(t_ray *ray, void *obj, t_intersect *out)
+double	ray_to_sphere(t_ray *ray, t_obj *obj, t_intersect *out)
 {
 	t_vec		oc;
 	double		t0;
@@ -71,7 +72,7 @@ double	ray_to_sphere(t_ray *ray, void *obj, t_intersect *out)
 	t_vec		abc;
 	t_sphere	*sphere;
 
-	sphere = obj;
+	sphere = obj->obj;
 	oc = vec_sub(&ray->pos, sphere->pos);
 	abc.x = vec_dot2(&ray->dir);
 	abc.y = 2 * vec_dot(&ray->dir, &oc);
@@ -84,13 +85,14 @@ double	ray_to_sphere(t_ray *ray, void *obj, t_intersect *out)
 			out->normal = vec_sub(&out->pos, sphere->pos);
 			out->normal = vec_norm(&out->normal);
 			out->dist = t0;
+			out->obj = obj;
 		}
 		return (t0);
 	}
 	return (0);
 }
 
-double	ray_to_cylinder(t_ray *ray, void *obj, t_intersect *out)
+double	ray_to_cylinder(t_ray *ray, t_obj *obj, t_intersect *out)
 {
 	t_vec		oc;
 	double		t0;
@@ -98,7 +100,7 @@ double	ray_to_cylinder(t_ray *ray, void *obj, t_intersect *out)
 	t_cyl		*cyl;
 	t_vec		abc;
 
-	cyl = obj;
+	cyl = obj->obj;
 	oc = vec_sub(&ray->pos, cyl->pos);
 	cyl->a = vec_sub(&ray->dir,
 		vec_mul(cyl->dir, vec_dot(&ray->dir, &cyl->dir)));
@@ -113,6 +115,7 @@ double	ray_to_cylinder(t_ray *ray, void *obj, t_intersect *out)
 			out->pos = vec_add(&ray->pos, vec_mul(ray->dir, t0));
 			out->normal = find_cyl_norm(cyl, out->pos);
 			out->dist = t0;
+			out->obj = obj;
 		}
 		return (t0);
 	}
@@ -141,14 +144,14 @@ t_vec	find_cone_abc(t_ray *ray, t_cone *cone)
 	return (abc);
 }
 
-double	ray_to_cone(t_ray *ray, void *obj, t_intersect *out)
+double	ray_to_cone(t_ray *ray, t_obj *obj, t_intersect *out)
 {
 	double		t0;
 	double		t1;
 	t_cone		*cone;
 	t_vec		abc;
 
-	cone = obj;
+	cone = obj->obj;
 	abc = find_cone_abc(ray, cone);
 	if (solv_quad(&abc, &t0, &t1) && t0 > 0)
 	{
@@ -157,6 +160,7 @@ double	ray_to_cone(t_ray *ray, void *obj, t_intersect *out)
 			out->pos = vec_add(&ray->pos, vec_mul(ray->dir, t0));
 			out->normal = find_cone_norm(cone, out->pos);
 			out->dist = t0;
+			out->obj = obj;
 		}
 		return (t0);
 	}

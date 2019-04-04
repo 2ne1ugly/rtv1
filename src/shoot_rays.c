@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shoot_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:31:14 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 14:09:39 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 15:42:46 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void		set_rays(t_app *app)
 	}
 }
 
-int			get_color(double dot, double ref, int color)
+int			get_color(double diff, double spec, int color)
 {
 	int r;
 	int g;
@@ -54,80 +54,127 @@ int			get_color(double dot, double ref, int color)
 	r = (color >> 16) & 0xFF;
 	g = (color >> 8) & 0xFF;
 	b = color & 0xFF;
-	if (ref > 0)
+	if (spec > 0)
 	{
-		ref = pow(ref, 3);
-		r += ref * 0xFF;
-		g += ref * 0xFF;
-		b += ref * 0xFF;
-		r = MIN(r, 0xFF);	
+		spec = pow(spec, 3);
+		r += spec * 0xFF;
+		g += spec * 0xFF;
+		b += spec * 0xFF;
+		r = MIN(r, 0xFF);
 		g = MIN(g, 0xFF);
 		b = MIN(b, 0xFF);
 	}
-	r *= dot;
-	g *= dot;
-	b *= dot;
+	r *= diff;
+	g *= diff;
+	b *= diff;
 	return ((r << 16) | (g << 8) | (b));
 }
 
-int			if_intersects(t_ray *ray, t_obj *obj)
+int			is_blocking_light(t_vec *from, t_obj *obj, t_vec *to)
 {
-	t_obj		*curr;
+	t_vec	to_light;
+	double	length_to_light;
+	t_ray	ray_to_light;
+	double	inter_section;
 
-	curr = obj;
-	while (curr != NULL)
+	to_light = vec_sub(to, *from);
+	length_to_light = vec_abs(&to_light);
+	ray_to_light.dir = vec_norm(&to_light);
+	ray_to_light.pos = vec_add(from, vec_mul(ray_to_light.dir, 0.01));
+	while (obj != NULL)
 	{
-		if (curr->ray_to_obj(ray, curr->obj, NULL) != 0)
+		inter_section = obj->ray_to_obj(&ray_to_light, obj, NULL);
+		if (inter_section != 0 && inter_section < length_to_light)
 		{
 			return (1);
 		}
-		curr = curr->next;
+		obj = obj->next;
 	}
 	return (0);
 }
 
-double		check_intersect(t_ray *ray, t_obj *obj, t_light *light)
+t_intersect	find_first_intersect(t_ray *ray, t_obj *obj)
 {
-	t_obj		*curr;
-	t_vec		point_to_light;
-	t_vec		reflection;
-	t_ray		new_ray;
-	t_obj		*last_obj;
+	t_intersect first_intersect;
+	t_intersect current_intersect;
 
-	t_intersect	point;
-	t_intersect last;
-
-	point.dist = 9999;
-	last_obj = NULL;
-	curr = obj;
-	while (curr != NULL)
+	first_intersect.obj = NULL;
+	first_intersect.dist = 2000000;
+	while (obj != NULL)
 	{
-		if (curr->ray_to_obj(ray, curr->obj, &last) != 0)
+		current_intersect.dist = 2000000;
+		if (obj->ray_to_obj(ray, obj, &current_intersect) != 0 &&
+			current_intersect.dist < first_intersect.dist)
 		{
-			if (last.dist < point.dist)
-			{
-				point = last;
-				last_obj = curr;
-			}
+			first_intersect = current_intersect;
 		}
-		curr = curr->next;
+		obj = obj->next;
 	}
-	if (point.dist < 9990)
+	return (first_intersect);
+}
+
+double		find_spec(t_ray *incident, t_intersect *itrsct,
+	t_light *lights, t_obj *obj)
+{
+	t_vec	reflect;
+	t_ray	to_light;
+	double	spec;
+	double	val;
+
+	spec = 0;
+	while (lights != NULL)
 	{
-		point_to_light = vec_sub(&light->pos, point.pos);
-		point_to_light = vec_norm(&point_to_light);
-		new_ray.pos = point.pos;
-		new_ray.dir = point_to_light;
-		if (if_intersects(&new_ray, obj))
-			return (0x000000);
-		reflection = vec_sub(&ray->dir, vec_mul(point.normal,
-		2 * vec_dot(&ray->dir, &point.normal)));
-		reflection = vec_norm(&reflection);
-		return (MAX(get_color(
-			vec_dot(&point.normal, &point_to_light), 
-			vec_dot(&reflection, &point_to_light), last_obj->color), 0));
+		to_light.pos = itrsct->pos;
+		to_light.dir = vec_sub(&lights->pos, itrsct->pos);
+		to_light.dir = vec_norm(&to_light.dir);
+		if (!is_blocking_light(&to_light.pos, obj, &lights->pos))
+		{
+			reflect = vec_rflct(&incident->dir, &itrsct->normal);
+			val = vec_dot(&reflect, &to_light.dir);
+			if (val > 0)
+				spec += pow(val, 3);
+		}
+		lights = lights->next;
 	}
-	return (-1);
+	return (spec);
+}
+
+double		find_diff(t_intersect *itrsct,
+	t_light *lights, t_obj *obj)
+{
+	t_ray	to_light;
+	double	diffuse;
+	double	val;
+
+	diffuse = 0;
+	while (lights != NULL)
+	{
+		to_light.pos = itrsct->pos;
+		to_light.dir = vec_sub(&lights->pos, itrsct->pos);
+		to_light.dir = vec_norm(&to_light.dir);
+		if (!is_blocking_light(&to_light.pos, obj, &lights->pos))
+		{
+			val = vec_dot(&itrsct->normal, &to_light.dir);
+			if (val > 0)
+				diffuse += val;
+		}
+		lights = lights->next;
+	}
+	return (diffuse);
+}
+
+int			shoot_view(t_ray *ray, t_obj *obj, t_light *lights)
+{
+	t_intersect	itrsct;
+	double		spec;
+	double		diff;
+
+	itrsct = find_first_intersect(ray, obj);
+	if (itrsct.obj == NULL)
+		return (0x888888);
+	spec = find_spec(ray, &itrsct, lights, obj);
+	diff = find_diff(&itrsct, lights, obj);
+	return (get_color(diff, spec, itrsct.obj->color));
 }
 
 void		shoot_rays(t_app *app)
@@ -135,7 +182,6 @@ void		shoot_rays(t_app *app)
 	int			i;
 	int			j;
 	t_ray		ray;
-	double		color;
 
 	i = 0;
 	while (i < app->height)
@@ -144,12 +190,8 @@ void		shoot_rays(t_app *app)
 		while (j < app->width)
 		{
 			ray = app->screen_ray[i][j];
-			color = check_intersect(&ray, app->scene.objects,
-				app->scene.lights);
-			if (color == -1)
-				img_pixel_put(app, j, i, 0x888888);
-			else
-				img_pixel_put(app, j, i, color);
+			img_pixel_put(app, j, i, shoot_view(&ray, app->scene.objects,
+				app->scene.lights));
 			j++;
 		}
 		i++;
