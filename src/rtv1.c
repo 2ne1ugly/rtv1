@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 14:00:30 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 14:09:22 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_obj	*add_scene_obj(t_app *app)
 	return (new);
 }
 
-void	add_scene_sphere(t_app *app, t_vec *pos, t_vec *rot, double radius)
+void	add_scene_sphere(t_app *app, t_vec *pos, double radius, int color)
 {
 	t_obj		*new;
 	t_sphere	*sphere;
@@ -41,13 +41,12 @@ void	add_scene_sphere(t_app *app, t_vec *pos, t_vec *rot, double radius)
 	sphere = malloc(sizeof(t_sphere));
 	sphere->pos = *pos;
 	sphere->radius = radius;
-	sphere->rot = *rot;
 	new->obj = sphere;
-	new->color = 0xFF00FF;
+	new->color = color;
 	new->ray_to_obj = ray_to_sphere;
 }
 
-void	add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, t_vec *norm)
+void	add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, int color)
 {
 	t_obj		*new;
 	t_plane		*plane;
@@ -55,36 +54,36 @@ void	add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, t_vec *norm)
 	new = add_scene_obj(app);
 	plane = malloc(sizeof(t_plane));
 	plane->pos = *pos;
-	new->color = 0x0000FF;
-	plane->normal = *norm;
+	new->color = color;
+	plane->normal = *rot;
 	plane->rot = *rot;
 	new->obj = plane;
 	new->ray_to_obj = ray_to_plane;
 }
 
-void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir)
+void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color)
 {
 	t_obj	*new;
 	t_cyl	*cyl;
 
 	new = add_scene_obj(app);
-	new->color = 0xFF00FF;
+	new->color = color;
 	new->ray_to_obj = ray_to_cylinder;
 	cyl = malloc(sizeof(t_cyl));
 	cyl->pos = *pos;
 	cyl->radius = .5;
 	cyl->rot = *rot;
-	cyl->dir = vec_norm(dir);
+	cyl->dir = vec_norm(rot);
 	new->obj = cyl;
 }
 
-void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir, double alpha)
+void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color)
 {
 	t_obj	*new;
 	t_cone	*cone;
 
 	new = add_scene_obj(app);
-	new->color = 0xFF00FF;
+	new->color = color;
 	new->ray_to_obj = ray_to_cone;
 	cone = malloc(sizeof(t_cone));
 	cone->pos = *pos;
@@ -92,7 +91,7 @@ void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir, double alpha
 	cone->c2a = cos(alpha) * cos(alpha);
 	cone->s2a = sin(alpha) * sin(alpha);
 	cone->rot = *rot;
-	cone->dir = *dir;
+	cone->dir = *rot;
 	new->obj = cone;
 }
 
@@ -114,17 +113,18 @@ int	main(void)
 	sphere = app->scene.objects->obj;
 	sphere->pos = (t_vec){0, 0, 0, 1};
 	sphere->radius = 0.5;*/
-	add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 0, 0, 1}, &(t_vec){0, 1, 0, 1});
+	add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xA0A0A0);
+	add_scene_plane(app, &(t_vec){0, 5, 0, 1}, &(t_vec){0, -1, 0, 1}, 0x505050);
+	add_scene_plane(app, &(t_vec){0, 0, 5, 1}, &(t_vec){0, 0, -1, 1}, 0x0000FF);
 
-	add_scene_sphere(app, &(t_vec){0, 0, 2, 1}, &(t_vec){0, 0, 0, 1}, .5);
-	add_scene_cylinder(app, &(t_vec){0, 0, 2, 1}, &(t_vec){0, 0, 0, 1},
-		&(t_vec){1, 1, 0, 0});
+	add_scene_sphere(app, &(t_vec){0, 0, 2, 1}, .5, 0xFF0000);
+	add_scene_cylinder(app, &(t_vec){0, 0, 2, 1}, &(t_vec){0, 0, 0, 1}, 0x00FF00);
 	//add_scene_cone(app, &(t_vec){0, 1, 2, 1}, &(t_vec){0, 0, 0, 1},
 	//	&(t_vec){0, 1, 0, 0}, 1.1);
 
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;
-	light->pos = (t_vec){0, 5, 0, 1};
+	light->pos = (t_vec){0, 0, 0, 1};
 	light->next = NULL;
 	shoot_rays(app);
 	mlx_loop(app->mlx_handle);
