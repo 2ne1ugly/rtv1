@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 11:17:55 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 14:00:30 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, t_vec *norm)
 	new = add_scene_obj(app);
 	plane = malloc(sizeof(t_plane));
 	plane->pos = *pos;
+	new->color = 0x0000FF;
 	plane->normal = *norm;
 	plane->rot = *rot;
 	new->obj = plane;
@@ -73,11 +74,11 @@ void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir)
 	cyl->pos = *pos;
 	cyl->radius = .5;
 	cyl->rot = *rot;
-	cyl->dir = *dir;
+	cyl->dir = vec_norm(dir);
 	new->obj = cyl;
 }
 
-void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir)
+void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir, double alpha)
 {
 	t_obj	*new;
 	t_cone	*cone;
@@ -87,7 +88,9 @@ void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, t_vec *dir)
 	new->ray_to_obj = ray_to_cone;
 	cone = malloc(sizeof(t_cone));
 	cone->pos = *pos;
-	cone->alpha = 1;
+	cone->alpha = alpha;
+	cone->c2a = cos(alpha) * cos(alpha);
+	cone->s2a = sin(alpha) * sin(alpha);
 	cone->rot = *rot;
 	cone->dir = *dir;
 	new->obj = cone;
@@ -111,16 +114,17 @@ int	main(void)
 	sphere = app->scene.objects->obj;
 	sphere->pos = (t_vec){0, 0, 0, 1};
 	sphere->radius = 0.5;*/
-	//add_scene_sphere(app, &(t_vec){1, -1, 1, 1}, &(t_vec){0, 0, 0, 1}, .5);
-	//add_scene_cylinder(app, &(t_vec){-1, 0, 1, 1}, &(t_vec){0, 0, 0, 1},
-	//	&(t_vec){0, 0, 1, 0});
-	add_scene_cone(app, &(t_vec){1, 0, 5, 1}, &(t_vec){0, 0, 0, 1},
-		&(t_vec){0, 0, 1, 0});
-	//add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 0, 0, 1}, &(t_vec){0, 1, 0, 1});
+	add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 0, 0, 1}, &(t_vec){0, 1, 0, 1});
+
+	add_scene_sphere(app, &(t_vec){0, 0, 2, 1}, &(t_vec){0, 0, 0, 1}, .5);
+	add_scene_cylinder(app, &(t_vec){0, 0, 2, 1}, &(t_vec){0, 0, 0, 1},
+		&(t_vec){1, 1, 0, 0});
+	//add_scene_cone(app, &(t_vec){0, 1, 2, 1}, &(t_vec){0, 0, 0, 1},
+	//	&(t_vec){0, 1, 0, 0}, 1.1);
 
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;
-	light->pos = (t_vec){0, 0, 0, 1};
+	light->pos = (t_vec){0, 5, 0, 1};
 	light->next = NULL;
 	shoot_rays(app);
 	mlx_loop(app->mlx_handle);
