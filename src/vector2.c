@@ -29,3 +29,13 @@ t_vec		vec_add(t_vec *lhs, t_vec rhs)
 	rhs.w = lhs->w || rhs.w;
 	return (rhs);
 }
+
+double		vec_dot2(t_vec *lhs)
+{
+	double	val;
+
+	val = lhs->x * lhs->x;
+	val += lhs->y * lhs->y;
+	val += lhs->z * lhs->z;
+	return (val);
+}

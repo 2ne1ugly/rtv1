@@ -98,17 +98,25 @@ typedef struct	s_cone
 {
 	t_vec	pos;
 	t_vec	rot;
-	double	radius;
-	double	height;
+	double	alpha;
+
+	//calculation
+	double	c2a;
+	double	s2a;
 }				t_cone;
 
-typedef struct	s_cylinder
+typedef struct	s_cyl
 {
 	t_vec	pos;
 	t_vec	rot;
 	double	radius;
-	double	height;
-}				t_cylinder;
+	//direction where cylinder is streched
+	t_vec	dir;
+
+	//for calculation space(no need to define)
+	t_vec	a;
+	t_vec	c;
+}				t_cyl;
 
 typedef struct	s_light
 {
@@ -120,6 +128,7 @@ typedef struct	s_obj
 {
 	void			*obj;
 	double			(*ray_to_obj)(t_ray *, void *, t_intersect *);
+	int				color;
 	struct s_obj	*next;
 }				t_obj;
 
@@ -154,6 +163,7 @@ t_vec			vec_norm(t_vec *vec);
 t_vec			vec_mul(t_vec lhs, double rhs);
 t_vec			vec_add(t_vec *lhs, t_vec rhs);
 t_vec			vec_sub(t_vec *lhs, t_vec rhs);
+double			vec_dot2(t_vec *lhs);
 
 void			set_rays(t_app *app);
 void			shoot_rays(t_app *app);

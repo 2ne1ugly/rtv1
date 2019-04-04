@@ -73,9 +73,9 @@ double	ray_to_sphere(t_ray *ray, void *obj, t_intersect *out)
 
 	sphere = obj;
 	oc = vec_sub(&ray->pos, sphere->pos);
-	abc.x = vec_dot(&ray->dir, &ray->dir);
+	abc.x = vec_dot2(&ray->dir);
 	abc.y = 2 * vec_dot(&ray->dir, &oc);
-	abc.z = vec_dot(&oc, &oc) - sphere->radius * sphere->radius;
+	abc.z = vec_dot2(&oc) - sphere->radius * sphere->radius;
 	if (solv_quad(&abc, &t0, &t1) && t0 > 0)
 	{
 		if (out != NULL)
@@ -90,31 +90,74 @@ double	ray_to_sphere(t_ray *ray, void *obj, t_intersect *out)
 	return (0);
 }
 
-/*
-//https://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf
-double	ray_to_cylinder(t_ray *ray, t_cylinder *cylinder, t_intersect *out)
+double	ray_to_cylinder(t_ray *ray, void *obj, t_intersect *out)
 {
-	t_vec	oc;
-	double	a;
-	double	b;
-	double	t;
-	double	disc;
+	t_vec		oc;
+	double		t0;
+	double		t1;
+	t_cyl		*cyl;
+	t_vec		abc;
 
-	oc = vec_sub(&ray->pos, &sphere->pos)
-	a = vec_dot(&ray->dir, &ray->dir);
-	b = vec_dot(&oc, &ray->dir) * 2.0;
-	disc = b * b - 4 * a * vec_dot(&oc,&oc) - sphere->radius * sphere->radius;
-    if(disc < 0)
-		return (0);
-    t = -(b + sqrt(disc)) / (2.0 * a);
-	if (out != NULL)
+	cyl = obj;
+	oc = vec_sub(&ray->pos, cyl->pos);
+	cyl->a = vec_sub(ray->dir,
+		vec_mul(cyl->dir, vec_dot(&ray->dir, &cyl->dir)));
+	cyl->c = vec_sub(oc, vec_mul(cyl->dir, vec_dot(&oc, &cyl->dir)));
+	abc.x = vec_dot2(&cyl->a);
+	abc.y = 2 * vec_dot(&cyl->a, &cyl->c);
+	abc.z = vec_dot2(&cyl->c) - cyl->radius * cyl->radius;
+	if (solv_quad(&abc, &t0, &t1) && t0 > 0)
 	{
-		oc = vec_mul(&ray->dir, t);
-		out->pos = vec_add(&ray->pos, &oc);
-		oc = vec_sub(&out->pos, &sphere->pos)
-		out->normal = vec_norm(&oc);
-		out->dist = t;
+		if (out != NULL)
+		{
+			out->pos = vec_add(&ray->pos, vec_mul(ray->dir, t0));
+			out->normal = find_cyl_norm(cyl, out->pos);
+			out->dist = t0;
+		}
+		return (t0);
 	}
-	return (t);
+	return (0);
 }
-*/
+
+t_vec	find_cone_abc(t_ray *ray, t_cone *cone)
+{
+	t_vec		oc;
+	t_vec		abc;
+	t_vec		tmp;
+	double		tmp2;
+
+	oc = vec_sub(ray->pos, cone->pos);
+	tmp = vec_sub(ray->dir, vec_mul(cone->dir, tmp2));
+	tmp2 = vec_dot(&ray->dir, &cone->dir);
+	abc.x = cone->c2a * vec_dot2(&tmp) - cone->s2a * tmp2 * tmp2;
+	abc.y = 2 * (cone->c2a * vec_dot(&tmp, vec_sub(&oc, vec_mul(cone->dir,
+		vec_dot(&oc, &cone->dir)))) - cone->s2a
+		* tmp2 * vec_dot(&oc, &cone->dir));
+	tmp = vec_sub(oc,
+		vec_mul(cone->dir, vec_dot(&oc, &cone->dir)));
+	tmp2 = vec_dot(&oc, &cone->dir);
+	abc.z = cone->c2a * vec_dot2(&abc.z) - cone->s2a * tmp2 * tmp2;
+	return (abc);
+}
+
+double	ray_to_cone(t_ray *ray, void *obj, t_intersect *out)
+{
+	double		t0;
+	double		t1;
+	t_cone		*cone;
+	t_vec		abc;
+
+	cone = obj;
+	abc = find_cone_abc(ray, cone);
+	if (solv_quad(&abc, &t0, &t1) && t0 > 0)
+	{
+		if (out != NULL)
+		{
+			out->pos = vec_add(&ray->pos, vec_mul(ray->dir, t0));
+			out->normal = find_cone_norm(cyl, out->pos);
+			out->dist = t0;
+		}
+		return (t0);
+	}
+	return (0);
+}

@@ -27,9 +27,9 @@ void		set_rays(t_app *app)
 	ray.pos = app->cam.pos;
 	min = vec_mul(app->cam.dir, app->cam.near);
 	step = vec_abs(&min) * tan(app->cam.fov / 2.0);
-	min = vec_add(&min, vec_mul(app->cam.x_axis, step));
-	min = vec_add(&min, vec_mul(app->cam.y_axis, step * app->aspect));
-	step /= app->height / 2;
+	min = vec_add(&min, vec_mul(app->cam.y_axis, step));
+	min = vec_sub(&min, vec_mul(app->cam.x_axis, step * app->aspect));
+	step /= app->height / 2.0;
 	i = -1;
 	while (++i < app->height)
 	{
@@ -37,7 +37,7 @@ void		set_rays(t_app *app)
 		while (++j < app->width)
 		{
 			ray.dir = vec_sub(&min, vec_mul(app->cam.y_axis, i * step));
-			ray.dir = vec_sub(&ray.dir, vec_mul(app->cam.x_axis,
+			ray.dir = vec_add(&ray.dir, vec_mul(app->cam.x_axis,
 			j * step * app->aspect));
 			ray.dir = vec_norm(&ray.dir);
 			app->screen_ray[i][j] = ray;
@@ -60,10 +60,12 @@ double		check_intersect(t_ray *ray, t_obj *obj, t_light *light)
 		{
 			point_to_light = vec_sub(&light->pos, point->pos);
 			point_to_light = vec_norm(&point_to_light);
-			reflection = vec_sub(&ray->dir, vec_mul(point->normal, 2 * vec_dot(&ray->dir, &point->normal)));
+			reflection = vec_sub(&ray->dir, vec_mul(point->normal,
+				2 * vec_dot(&ray->dir, &point->normal)));
 			reflection = vec_norm(&reflection);
 			free(point);
-			return (MAX(vec_dot(&reflection, &point_to_light), 0));
+			return (MAX(get_color(
+				vec_dot(&reflection, &point_to_light), curr->color), 0));
 		}
 		curr = curr->next;
 	}
@@ -86,16 +88,12 @@ void		shoot_rays(t_app *app)
 		while (j < app->width)
 		{
 			ray = app->screen_ray[i][j];
-			color = check_intersect(&ray, app->scene.objects, app->scene.lights);
+			color = check_intersect(&ray, app->scene.objects,
+				app->scene.lights);
 			if (color == -1)
-			{
 				img_pixel_put(app, j, i, 0x888888);
-			}
 			else
-			{
-				val = color * 0xFF;
-				img_pixel_put(app, j, i, val << 8);
-			}
+				img_pixel_put(app, j, i, color);
 			j++;
 		}
 		i++;
