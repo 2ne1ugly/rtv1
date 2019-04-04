@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:45:40 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/02 21:44:42 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 10:25:02 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ double	ray_to_cylinder(t_ray *ray, void *obj, t_intersect *out)
 
 	cyl = obj;
 	oc = vec_sub(&ray->pos, cyl->pos);
-	cyl->a = vec_sub(ray->dir,
+	cyl->a = vec_sub(&ray->dir,
 		vec_mul(cyl->dir, vec_dot(&ray->dir, &cyl->dir)));
-	cyl->c = vec_sub(oc, vec_mul(cyl->dir, vec_dot(&oc, &cyl->dir)));
+	cyl->c = vec_sub(&oc, vec_mul(cyl->dir, vec_dot(&oc, &cyl->dir)));
 	abc.x = vec_dot2(&cyl->a);
 	abc.y = 2 * vec_dot(&cyl->a, &cyl->c);
 	abc.z = vec_dot2(&cyl->c) - cyl->radius * cyl->radius;
@@ -124,19 +124,20 @@ t_vec	find_cone_abc(t_ray *ray, t_cone *cone)
 	t_vec		oc;
 	t_vec		abc;
 	t_vec		tmp;
+	t_vec		tmp3;
 	double		tmp2;
 
-	oc = vec_sub(ray->pos, cone->pos);
-	tmp = vec_sub(ray->dir, vec_mul(cone->dir, tmp2));
+	oc = vec_sub(&ray->pos, cone->pos);
 	tmp2 = vec_dot(&ray->dir, &cone->dir);
+	tmp = vec_sub(&ray->dir, vec_mul(cone->dir, tmp2));
 	abc.x = cone->c2a * vec_dot2(&tmp) - cone->s2a * tmp2 * tmp2;
-	abc.y = 2 * (cone->c2a * vec_dot(&tmp, vec_sub(&oc, vec_mul(cone->dir,
-		vec_dot(&oc, &cone->dir)))) - cone->s2a
+	tmp3 = vec_sub(&oc, vec_mul(cone->dir, vec_dot(&oc, &cone->dir)));
+	abc.y = 2 * (cone->c2a * vec_dot(&tmp, &tmp3) - cone->s2a
 		* tmp2 * vec_dot(&oc, &cone->dir));
-	tmp = vec_sub(oc,
+	tmp = vec_sub(&oc,
 		vec_mul(cone->dir, vec_dot(&oc, &cone->dir)));
 	tmp2 = vec_dot(&oc, &cone->dir);
-	abc.z = cone->c2a * vec_dot2(&abc.z) - cone->s2a * tmp2 * tmp2;
+	abc.z = cone->c2a * vec_dot2(&abc) - cone->s2a * tmp2 * tmp2;
 	return (abc);
 }
 
@@ -154,7 +155,7 @@ double	ray_to_cone(t_ray *ray, void *obj, t_intersect *out)
 		if (out != NULL)
 		{
 			out->pos = vec_add(&ray->pos, vec_mul(ray->dir, t0));
-			out->normal = find_cone_norm(cyl, out->pos);
+			out->normal = find_cone_norm(cone, out->pos);
 			out->dist = t0;
 		}
 		return (t0);

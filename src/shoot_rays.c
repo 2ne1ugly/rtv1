@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:31:14 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 15:58:36 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 10:15:56 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,21 @@ void		set_rays(t_app *app)
 	}
 }
 
+int			get_color(double dot, int color)
+{
+	int r;
+	int g;
+	int b;
+
+	r = (color >> 16) & 0xFF;
+	g = (color >> 8) & 0xFF;
+	b = color & 0xFF;
+	r *= dot;
+	g *= dot;
+	b *= dot;
+	return ((r << 16) | (g << 8) | (b));
+}
+
 double		check_intersect(t_ray *ray, t_obj *obj, t_light *light)
 {
 	t_obj		*curr;
@@ -79,7 +94,6 @@ void		shoot_rays(t_app *app)
 	int			j;
 	t_ray		ray;
 	double		color;
-	int			val;
 
 	i = 0;
 	while (i < app->height)
