@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 15:22:11 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 16:38:14 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,13 @@ typedef struct	s_app
 	t_scene		scene;
 }				t_app;
 
+typedef struct	s_args
+{
+	t_app		*app;
+	int			index;
+	int			threads;
+}				t_args;
+
 int				app_looper(void *param);
 
 void			img_pixel_put(t_app *app, int x, int y, int color);
@@ -173,8 +180,9 @@ double			vec_dot2(t_vec *lhs);
 t_vec			vec_rflct(t_vec *inc, t_vec *norm);
 
 void			set_rays(t_app *app);
-void			shoot_rays(t_app *app);
+void			*shoot_rays(void *args);
 void			set_basis(t_cam *cam);
+void			run_threads(t_app *app);
 
 double			ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out);
 double			ray_to_sphere(t_ray *ray, t_obj *obj, t_intersect *out);

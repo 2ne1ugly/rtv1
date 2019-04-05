@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 15:04:51 by zfaria            #+#    #+#             */
-/*   Updated: 2019/04/03 16:00:42 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 16:39:45 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ int	key_event(int keycode, void *ptr)
 		app->scene.lights->pos.y -= .5;
 	if (keycode == 13)
 		app->scene.lights->pos.y += .5;
-	shoot_rays(app);
+	run_threads(app);
 	return (0);
 }

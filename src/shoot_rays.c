@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shoot_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:31:14 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 15:42:46 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 16:58:26 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int			get_color(double diff, double spec, int color)
 	b = color & 0xFF;
 	if (spec > 0)
 	{
-		spec = pow(spec, 3);
+		spec = pow(spec, 5);
 		r += spec * 0xFF;
 		g += spec * 0xFF;
 		b += spec * 0xFF;
@@ -67,6 +67,9 @@ int			get_color(double diff, double spec, int color)
 	r *= diff;
 	g *= diff;
 	b *= diff;
+	r = MIN(r, 0xFF);
+	g = MIN(g, 0xFF);
+	b = MIN(b, 0xFF);
 	return ((r << 16) | (g << 8) | (b));
 }
 
@@ -80,7 +83,7 @@ int			is_blocking_light(t_vec *from, t_obj *obj, t_vec *to)
 	to_light = vec_sub(to, *from);
 	length_to_light = vec_abs(&to_light);
 	ray_to_light.dir = vec_norm(&to_light);
-	ray_to_light.pos = vec_add(from, vec_mul(ray_to_light.dir, 0.01));
+	ray_to_light.pos = vec_add(from, vec_mul(ray_to_light.dir, 0.000000001));
 	while (obj != NULL)
 	{
 		inter_section = obj->ray_to_obj(&ray_to_light, obj, NULL);
@@ -177,25 +180,29 @@ int			shoot_view(t_ray *ray, t_obj *obj, t_light *lights)
 	return (get_color(diff, spec, itrsct.obj->color));
 }
 
-void		shoot_rays(t_app *app)
+void		*shoot_rays(void *arg)
 {
 	int			i;
 	int			j;
 	t_ray		ray;
+	t_args		*args;
+	t_app		*app;
 
+	args = arg;
+	app = args->app;
 	i = 0;
 	while (i < app->height)
 	{
-		j = 0;
+		j = args->index;
 		while (j < app->width)
 		{
 			ray = app->screen_ray[i][j];
 			img_pixel_put(app, j, i, shoot_view(&ray, app->scene.objects,
 				app->scene.lights));
-			j++;
+			j += args->threads;
 		}
 		i++;
 	}
-	mlx_put_image_to_window(app->mlx_handle,
-		app->wnd_handle, app->img.ptr, 0, 0);
+	free(arg);
+	return (0);
 }

@@ -1,8 +1,8 @@
 CC=clang
-CFLAGS=-Werror -Wextra -Wall -g -Ilibft -I. -Imlx -Iinclude -Ofast -fsanitize=address
-LFLAGS=-L libft/ -lft -L mlx/ -lmlx -framework OpenGL -framework AppKit -fsanitize=address
-NAME=RTv1
+CFLAGS=-Werror -Wextra -Wall -g -Ilibft -I. -Imlx -Iinclude -Ofast
+LFLAGS=-L libft/ -lft -L mlx/ -lmlx -framework OpenGL -framework AppKit -pthread
 SRC=$(wildcard src/*)
+NAME=RTv1
 OBJ=$(SRC:src/%.c=%.o)
 SHELL := /bin/bash
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 15:49:43 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 16:48:16 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,15 @@ int	main(void)
 	add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xA0A0A0);
 	add_scene_plane(app, &(t_vec){0, 2, 0, 1}, &(t_vec){0, -1, 0, 1}, 0x505050);
 	add_scene_plane(app, &(t_vec){0, 0, 5, 1}, &(t_vec){0, 0, -1, 1}, 0x0000FF);
-
-	add_scene_sphere(app, &(t_vec){0, 0, 2, 1}, .5, 0xFF0000);
+	add_scene_sphere(app, &(t_vec){0, -1.5, 0, 1}, .25, 0xFF0000);
+	add_scene_sphere(app, &(t_vec){2, -2, 0, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){2, 2, 0, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){2, -2, 2, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){2, 2, 2, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){-2, -2, 0, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){-2, 2, 0, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){-2, -2, 2, 1}, .5, 0x00FF00);
+	add_scene_sphere(app, &(t_vec){-2, 2, 2, 1}, .5, 0x00FF00);
 	add_scene_cylinder(app, &(t_vec){2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
 	add_scene_cylinder(app, &(t_vec){-2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
 	add_scene_cylinder(app, &(t_vec){2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
@@ -127,14 +134,14 @@ int	main(void)
 
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;
-	light->pos = (t_vec){1, 0, 0, 1};
+	light->pos = (t_vec){3, 1.5, -1, 1};
 	light->next = NULL;
 	app->scene.lights->next = malloc(sizeof(t_light));
 	light = app->scene.lights->next;
-	light->pos = (t_vec){-1, 0, 0, 1};
+	light->pos = (t_vec){-3, 1.5, -1, 1};
 	light->next = NULL;
 
-	shoot_rays(app);
+	run_threads(app);
 	mlx_loop(app->mlx_handle);
 	return (0);
 }
