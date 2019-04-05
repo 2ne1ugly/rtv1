@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 21:31:59 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 22:38:36 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,9 @@ t_vec			vec_sub(t_vec *lhs, t_vec rhs);
 double			vec_dot2(t_vec *lhs);
 t_vec			vec_rflct(t_vec *inc, t_vec *norm);
 t_vec			vec_sub_mul(t_vec *lhs, t_vec *rhs);
+
+void			vec_transform(t_vec *ret, t_vec *vec, t_mat *mat);
+t_mat			rotation_mat(double x, double y, double z);
 
 void			set_rays(t_app *app);
 void			*shoot_rays(void *args);

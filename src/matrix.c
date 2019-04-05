@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 18:44:28 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/03 10:47:01 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 22:46:29 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		mat_identity(t_mat *mat)
 t_mat		rotation_mat(double x, double y, double z)
 {
 	t_mat result;
-	
+
 	result.val[0][0] = cos(y) * cos(z);
 	result.val[0][1] = cos(y) * sin(z);
 	result.val[0][2] = -sin(y);

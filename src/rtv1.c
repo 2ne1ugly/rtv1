@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 22:19:22 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/04 22:48:40 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,14 @@ void	add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, int color)
 {
 	t_obj		*new;
 	t_plane		*plane;
+	t_mat		rot_mat;
 
 	new = add_scene_obj(app);
 	plane = malloc(sizeof(t_plane));
 	plane->pos = *pos;
 	new->color = color;
-	plane->normal = *rot;
+	rot_mat = rotation_mat(rot->x, rot->y, rot->z);
+	vec_transform(&plane->normal, &(t_vec){0, 1, 0, 0}, &rot_mat);
 	plane->rot = *rot;
 	new->obj = plane;
 	new->ray_to_obj = ray_to_plane;
@@ -65,6 +67,7 @@ void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color)
 {
 	t_obj	*new;
 	t_cyl	*cyl;
+	t_mat	rot_mat;
 
 	new = add_scene_obj(app);
 	new->color = color;
@@ -73,7 +76,8 @@ void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color)
 	cyl->pos = *pos;
 	cyl->radius = .25;
 	cyl->rot = *rot;
-	cyl->dir = vec_norm(rot);
+	rot_mat = rotation_mat(rot->x, rot->y, rot->z);
+	vec_transform(&cyl->dir, &(t_vec){0, 1, 0, 0}, &rot_mat);
 	new->obj = cyl;
 }
 
@@ -81,6 +85,7 @@ void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color)
 {
 	t_obj	*new;
 	t_cone	*cone;
+	t_mat	rot_mat;
 
 	new = add_scene_obj(app);
 	new->color = color;
@@ -91,7 +96,8 @@ void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color)
 	cone->c2a = cos(alpha) * cos(alpha);
 	cone->s2a = sin(alpha) * sin(alpha);
 	cone->rot = *rot;
-	cone->dir = *rot;
+	rot_mat = rotation_mat(rot->x, rot->y, rot->z);
+	vec_transform(&cone->dir, &(t_vec){0, 1, 0, 0}, &rot_mat);
 	new->obj = cone;
 }
 
@@ -113,9 +119,9 @@ int	main(void)
 	sphere = app->scene.objects->obj;
 	sphere->pos = (t_vec){0, 0, 0, 1};
 	sphere->radius = 0.5;*/
-	add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xA0A0A0);
-	add_scene_plane(app, &(t_vec){0, 2, 0, 1}, &(t_vec){0, -1, 0, 1}, 0x505050);
-	add_scene_plane(app, &(t_vec){0, 0, 5, 1}, &(t_vec){0, 0, -1, 1}, 0x0000FF);
+	add_scene_plane(app, &(t_vec){0, -2, 0, 1}, &(t_vec){0, 0, 0, 1}, 0xA0A0A0);
+	add_scene_plane(app, &(t_vec){0, 2, 0, 1}, &(t_vec){PI, 0, 0, 1}, 0x505050);
+	add_scene_plane(app, &(t_vec){0, 0, 10, 1}, &(t_vec){-PI / 4, 0, 0, 1}, 0x0000FF);
 	add_scene_sphere(app, &(t_vec){0, -1.5, 0, 1}, .25, 0xFF0000);
 	add_scene_sphere(app, &(t_vec){2, -2, 0, 1}, .5, 0xCCCCCC);
 	add_scene_sphere(app, &(t_vec){2, 2, 0, 1}, .5, 0xCCCCCC);
@@ -125,13 +131,13 @@ int	main(void)
 	add_scene_sphere(app, &(t_vec){-2, 2, 0, 1}, .5, 0xCCCCCC);
 	add_scene_sphere(app, &(t_vec){-2, -2, 2, 1}, .5, 0xCCCCCC);
 	add_scene_sphere(app, &(t_vec){-2, 2, 2, 1}, .5, 0xCCCCCC);
-	add_scene_cylinder(app, &(t_vec){2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
-	add_scene_cylinder(app, &(t_vec){-2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
-	add_scene_cylinder(app, &(t_vec){2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
-	add_scene_cylinder(app, &(t_vec){-2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
-	add_scene_cone(app, &(t_vec){0, 0, 4, 1}, &(t_vec){0, 1, 0, 0}, PI / 12, 0xFFFF00);
-	add_scene_cone(app, &(t_vec){-4, 0, 2, 1}, &(t_vec){0, 1, 0, 0}, PI / 12, 0xFFFF00);
-	add_scene_cone(app, &(t_vec){4, 0, 2, 1}, &(t_vec){0, 1, 0, 0}, PI / 12, 0xFFFF00);
+	add_scene_cylinder(app, &(t_vec){2, 0, 0, 1}, &(t_vec){0, 0, 0, 0}, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){-2, 0, 0, 1}, &(t_vec){0, 0, 0, 0}, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){2, 0, 2, 1}, &(t_vec){0, 0, 0, 0}, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){-2, 0, 2, 1}, &(t_vec){0, 0, 0, 0}, 0xCCCCCC);
+	add_scene_cone(app, &(t_vec){0, 0, 4, 1}, &(t_vec){0, 0, 0, 0}, PI / 12, 0xFFFF00);
+	add_scene_cone(app, &(t_vec){-4, 0, 2, 1}, &(t_vec){0, 0, 0, 0}, PI / 12, 0xFFFF00);
+	add_scene_cone(app, &(t_vec){4, 0, 2, 1}, &(t_vec){0, 0, 0, 0}, PI / 12, 0xFFFF00);
 
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;
