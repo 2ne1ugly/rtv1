@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 16:48:16 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/04 22:19:22 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,21 @@ int	main(void)
 	add_scene_plane(app, &(t_vec){0, 2, 0, 1}, &(t_vec){0, -1, 0, 1}, 0x505050);
 	add_scene_plane(app, &(t_vec){0, 0, 5, 1}, &(t_vec){0, 0, -1, 1}, 0x0000FF);
 	add_scene_sphere(app, &(t_vec){0, -1.5, 0, 1}, .25, 0xFF0000);
-	add_scene_sphere(app, &(t_vec){2, -2, 0, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){2, 2, 0, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){2, -2, 2, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){2, 2, 2, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){-2, -2, 0, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){-2, 2, 0, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){-2, -2, 2, 1}, .5, 0x00FF00);
-	add_scene_sphere(app, &(t_vec){-2, 2, 2, 1}, .5, 0x00FF00);
-	add_scene_cylinder(app, &(t_vec){2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
-	add_scene_cylinder(app, &(t_vec){-2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
-	add_scene_cylinder(app, &(t_vec){2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
-	add_scene_cylinder(app, &(t_vec){-2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0x00FF00);
-	//add_scene_cone(app, &(t_vec){0, 1, 2, 1}, &(t_vec){0, 0, 0, 1},
-	//	&(t_vec){0, 1, 0, 0}, 1.1);
+	add_scene_sphere(app, &(t_vec){2, -2, 0, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){2, 2, 0, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){2, -2, 2, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){2, 2, 2, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){-2, -2, 0, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){-2, 2, 0, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){-2, -2, 2, 1}, .5, 0xCCCCCC);
+	add_scene_sphere(app, &(t_vec){-2, 2, 2, 1}, .5, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){-2, 0, 0, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
+	add_scene_cylinder(app, &(t_vec){-2, 0, 2, 1}, &(t_vec){0, 1, 0, 1}, 0xCCCCCC);
+	add_scene_cone(app, &(t_vec){0, 0, 4, 1}, &(t_vec){0, 1, 0, 0}, PI / 12, 0xFFFF00);
+	add_scene_cone(app, &(t_vec){-4, 0, 2, 1}, &(t_vec){0, 1, 0, 0}, PI / 12, 0xFFFF00);
+	add_scene_cone(app, &(t_vec){4, 0, 2, 1}, &(t_vec){0, 1, 0, 0}, PI / 12, 0xFFFF00);
 
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;

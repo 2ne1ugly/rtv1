@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   normal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/04 21:52:13 by mchi              #+#    #+#             */
+/*   Updated: 2019/04/04 21:58:54 by mchi             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "rtv1.h"
 
@@ -12,7 +23,6 @@ t_vec	find_cyl_norm(t_cyl	*cyl, t_vec pos)
 	return (vec_norm(&rhs));
 }
 
-//there's a chance that this wont work
 t_vec	find_cone_norm(t_cone *cone, t_vec pos)
 {
 	t_vec lhs;
