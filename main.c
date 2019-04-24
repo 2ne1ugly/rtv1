@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rtv1.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/24 11:37:14 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/24 12:05:32 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		main(void)
 	light = app->scene.lights->next;
 	light->pos = (t_vec){-3, 1.5, -1, 1};
 	light->next = NULL;
+	camera_update(&app->cam);
 	run_threads(app);
 	mlx_loop(app->mlx_handle);
 	return (0);
