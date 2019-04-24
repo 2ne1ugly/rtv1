@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   nome.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 17:38:39 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/11 17:38:40 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/24 11:49:34 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "rtv1.h"
 
-int 	solv_quad(t_vec *i, double *x0, double *x1)
+int		solv_quad(t_vec *i, double *x0, double *x1)
 {
 	double disc;
 	double q;

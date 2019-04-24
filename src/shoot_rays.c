@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shoot_rays.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:31:14 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/11 17:23:11 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/24 12:02:25 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ void		set_rays(t_app *app)
 	double		step;
 
 	ray.pos = app->cam.pos;
+	camera_update(&app->cam);
 	min = vec_mul(app->cam.dir, app->cam.near);
 	step = vec_abs(&min) * tan(app->cam.fov / 2.0);
 	min = vec_add(&min, vec_mul(app->cam.y_axis, step));
 	min = vec_sub(&min, vec_mul(app->cam.x_axis, step * app->aspect));
 	step /= app->height / 2.0;
 	i = -1;
-	while (++i < app->height)
+	while (++i < app->height && (j = -1))
 	{
-		j = -1;
 		while (++j < app->width)
 		{
 			ray.dir = vec_sub(&min, vec_mul(app->cam.y_axis, i * step));

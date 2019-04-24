@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 17:25:10 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 12:04:53 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/24 11:36:31 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color)
 	new->obj = cyl;
 }
 
-void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color)
+void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, int color)
 {
 	t_obj	*new;
 	t_cone	*cone;
@@ -99,9 +99,9 @@ void	add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color)
 	cone = malloc(sizeof(t_cone));
 	tl_mat = translation_mat(pos);
 	vec_transform(&cone->pos, &(t_vec){0, 0, 0, 1}, &tl_mat);
-	cone->alpha = alpha;
-	cone->c2a = cos(alpha) * cos(alpha);
-	cone->s2a = sin(alpha) * sin(alpha);
+	cone->alpha = rot->w;
+	cone->c2a = cos(cone->alpha) * cos(cone->alpha);
+	cone->s2a = sin(cone->alpha) * sin(cone->alpha);
 	cone->rot = *rot;
 	rot_mat = rotation_mat(rot->x, rot->y, rot->z);
 	vec_transform(&cone->dir, &(t_vec){0, 1, 0, 0}, &rot_mat);

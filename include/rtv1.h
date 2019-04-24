@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rtv1.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/13 12:01:26 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/24 12:00:54 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # define Z 2
 
 # define MIN(a,b) (((a)<(b))?(a):(b))
-# define MAX(a,b) (((a)>(b))?(a):(b))
 
 # include <mlx.h>
 # include <stdlib.h>
@@ -53,6 +52,7 @@ typedef struct	s_cam
 {
 	t_vec	pos;
 	t_vec	dir;
+	t_vec	rot;
 	double	fov;
 	double	near;
 	//for calculation
@@ -180,6 +180,7 @@ double			vec_dot2(t_vec *lhs);
 t_vec			vec_rflct(t_vec *inc, t_vec *norm);
 t_vec			vec_sub_mul(t_vec *lhs, t_vec *rhs);
 
+void			camera_update(t_cam *cam);
 
 void			vec_transform(t_vec *ret, t_vec *vec, t_mat *mat);
 t_mat			rotation_mat(double x, double y, double z);
@@ -211,6 +212,6 @@ t_vec			find_cyl_norm(t_cyl	*cyl, t_vec pos);
 void			add_scene_sphere(t_app *app, t_vec *pos, double radius, int color);
 void			add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, int color);
 void			add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color);
-void			add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color);
+void			add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, int color);
 
 #endif
