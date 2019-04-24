@@ -6,13 +6,12 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:45:40 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 22:12:19 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/11 17:30:12 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rtv1.h"
 
-//if col is NULL, it only returns dist or 0 (if no intersection)
 double	ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out)
 {
 	double	denom;
@@ -40,30 +39,6 @@ double	ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out)
 	return (0);
 }
 
-//i is input, a, b, c. output is int, double, double
-//if this give complex result, it returns 0
-int 	solv_quad(t_vec *i, double *x0, double *x1)
-{
-	double disc;
-	double q;
-
-	disc = i->y * i->y - 4 * i->x * i->z;
-	if (disc < 0)
-		return (0);
-	*x0 = -i->y + sqrt(disc);
-	*x1 = -i->y - sqrt(disc);
-	*x0 /= 2 * i->x;
-	*x1 /= 2 * i->x;
-	if (*x0 > *x1)
-	{
-		q = *x0;
-		*x0 = *x1;
-		*x1 = q;
-	}
-	return (1);
-}
-
-//if ray is inside the sphere, it will work oddly
 double	ray_to_sphere(t_ray *ray, t_obj *obj, t_intersect *out)
 {
 	t_vec		oc;

@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 22:38:36 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/13 12:01:26 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,13 +180,23 @@ double			vec_dot2(t_vec *lhs);
 t_vec			vec_rflct(t_vec *inc, t_vec *norm);
 t_vec			vec_sub_mul(t_vec *lhs, t_vec *rhs);
 
+
 void			vec_transform(t_vec *ret, t_vec *vec, t_mat *mat);
 t_mat			rotation_mat(double x, double y, double z);
+t_mat			translation_mat(t_vec *vec);
+void			mat_identity(t_mat *mat);
+
+
+int				get_color(double diff, double spec, int color);
+int				is_blocking_light(t_vec *from, t_obj *obj, t_vec *to);
+t_intersect		find_first_intersect(t_ray *ray, t_obj *obj);
 
 void			set_rays(t_app *app);
 void			*shoot_rays(void *args);
 void			set_basis(t_cam *cam);
 void			run_threads(t_app *app);
+
+int 			solv_quad(t_vec *i, double *x0, double *x1);
 
 double			ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out);
 double			ray_to_sphere(t_ray *ray, t_obj *obj, t_intersect *out);
@@ -197,5 +207,10 @@ int				key_event(int keycode, void *ptr);
 
 t_vec			find_cone_norm(t_cone *cone, t_vec pos);
 t_vec			find_cyl_norm(t_cyl	*cyl, t_vec pos);
+
+void			add_scene_sphere(t_app *app, t_vec *pos, double radius, int color);
+void			add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, int color);
+void			add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color);
+void			add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, double alpha, int color);
 
 #endif

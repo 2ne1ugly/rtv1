@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   world_view_proj.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/28 21:44:02 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 11:33:30 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/13 12:05:23 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,15 @@ void	set_basis(t_cam *cam)
 	cam->x_axis = (t_vec){0.0, 1.0, 0.0, 0.0};
 	cam->x_axis = vec_cross(&cam->z_axis, &cam->x_axis);
 	cam->y_axis = vec_cross(&cam->x_axis, &cam->z_axis);
+}
+
+t_mat	translation_mat(t_vec *vec)
+{
+	t_mat	mat;
+
+	mat_identity(&mat);
+	mat.val[3][0] = vec->x;
+	mat.val[3][1] = vec->y;
+	mat.val[3][2] = vec->z;
+	return (mat);
 }

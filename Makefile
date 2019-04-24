@@ -1,6 +1,6 @@
 CC=clang
 CFLAGS=-Werror -Wextra -Wall -g -Ilibft -I. -Imlx -Iinclude -Ofast
-LFLAGS=-L libft/ -lft -L mlx/ -lmlx -framework OpenGL -framework AppKit -pthread
+LFLAGS=-L libft/ -lft -L mlx/ -lmlx -framework OpenGL -framework AppKit
 SRC=$(wildcard src/*)
 NAME=RTv1
 OBJ=$(SRC:src/%.c=%.o)

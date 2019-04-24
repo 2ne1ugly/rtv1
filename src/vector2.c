@@ -6,7 +6,7 @@
 /*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 04:28:48 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/04 22:09:42 by mchi             ###   ########.fr       */
+/*   Updated: 2019/04/11 17:19:24 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,5 @@ t_vec		vec_rflct(t_vec *inc, t_vec *norm)
 
 t_vec		vec_sub_mul(t_vec *lhs, t_vec *rhs)
 {
-	return(vec_sub(lhs, vec_mul(*rhs, vec_dot(lhs, rhs))));
+	return (vec_sub(lhs, vec_mul(*rhs, vec_dot(lhs, rhs))));
 }

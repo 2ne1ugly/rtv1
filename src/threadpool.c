@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threadpool.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mchi <mchi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/04 16:30:46 by zfaria            #+#    #+#             */
-/*   Updated: 2019/04/04 16:59:46 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/13 12:11:37 by mchi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	run_threads(t_app *app)
 	int			i;
 	t_args		*args;
 
+	set_basis(&app->cam);
+	set_rays(app);
 	i = 0;
 	while (i < THC)
 	{
