@@ -6,28 +6,25 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/24 12:00:54 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/04/24 12:14:01 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RTV1_H
 # define RTV1_H
 
+# include <mlx.h>
+# include <stdlib.h>
+# include <libft.h>
+# include <math.h>
+
 # define PI 3.14159265359
-# define MAGENTA 0x00FF00
 
 # define X 0
 # define Y 1
 # define Z 2
 
 # define MIN(a,b) (((a)<(b))?(a):(b))
-
-# include <mlx.h>
-# include <stdlib.h>
-# include <libft.h>
-# include <math.h>
-
-typedef unsigned int	t_uint;
 
 typedef struct	s_mat
 {
@@ -55,7 +52,6 @@ typedef struct	s_cam
 	t_vec	rot;
 	double	fov;
 	double	near;
-	//for calculation
 	t_vec	x_axis;
 	t_vec	y_axis;
 	t_vec	z_axis;
@@ -70,9 +66,6 @@ typedef struct	s_img
 	int		endian;
 }				t_img;
 
-//	All normals and directions has to be normalized.
-
-
 typedef struct	s_sphere
 {
 	t_vec	pos;
@@ -84,8 +77,6 @@ typedef struct	s_plane
 {
 	t_vec	pos;
 	t_vec	rot;
-
-	//calculation
 	t_vec	normal;
 }				t_plane;
 
@@ -95,8 +86,6 @@ typedef struct	s_cone
 	t_vec	rot;
 	double	alpha;
 	t_vec	dir;
-
-	//calculation
 	double	c2a;
 	double	s2a;
 }				t_cone;
@@ -106,10 +95,7 @@ typedef struct	s_cyl
 	t_vec	pos;
 	t_vec	rot;
 	double	radius;
-	//direction where cylinder is streched
 	t_vec	dir;
-
-	//for calculation space(no need to define)
 	t_vec	a;
 	t_vec	c;
 }				t_cyl;
@@ -120,20 +106,20 @@ typedef struct	s_light
 	struct s_light	*next;
 }				t_light;
 
-typedef struct	s_obj t_obj;
+struct s_obj;
 
 typedef struct	s_intersect
 {
-	t_vec	pos;
-	t_vec	normal;
-	double	dist;
-	t_obj	*obj;
+	t_vec			pos;
+	t_vec			normal;
+	double			dist;
+	struct s_obj	*obj;
 }				t_intersect;
 
 typedef struct	s_obj
 {
 	void			*obj;
-	double			(*ray_to_obj)(t_ray *, t_obj *, t_intersect *);
+	double			(*ray_to_obj)(t_ray *, struct s_obj *, t_intersect *);
 	int				color;
 	struct s_obj	*next;
 }				t_obj;
@@ -151,7 +137,7 @@ typedef struct	s_app
 	int			width;
 	int			height;
 	t_img		img;
-	double		aspect;	//width / height
+	double		aspect;
 	t_cam		cam;
 	t_ray		**screen_ray;
 	t_scene		scene;
@@ -187,7 +173,6 @@ t_mat			rotation_mat(double x, double y, double z);
 t_mat			translation_mat(t_vec *vec);
 void			mat_identity(t_mat *mat);
 
-
 int				get_color(double diff, double spec, int color);
 int				is_blocking_light(t_vec *from, t_obj *obj, t_vec *to);
 t_intersect		find_first_intersect(t_ray *ray, t_obj *obj);
@@ -197,7 +182,7 @@ void			*shoot_rays(void *args);
 void			set_basis(t_cam *cam);
 void			run_threads(t_app *app);
 
-int 			solv_quad(t_vec *i, double *x0, double *x1);
+int				solv_quad(t_vec *i, double *x0, double *x1);
 
 double			ray_to_plane(t_ray *ray, t_obj *obj, t_intersect *out);
 double			ray_to_sphere(t_ray *ray, t_obj *obj, t_intersect *out);
@@ -209,9 +194,9 @@ int				key_event(int keycode, void *ptr);
 t_vec			find_cone_norm(t_cone *cone, t_vec pos);
 t_vec			find_cyl_norm(t_cyl	*cyl, t_vec pos);
 
-void			add_scene_sphere(t_app *app, t_vec *pos, double radius, int color);
+void			add_scene_sphere(t_app *app, t_vec *pos, double r, int color);
 void			add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, int color);
-void			add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color);
+void			add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int c);
 void			add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, int color);
 
 #endif
