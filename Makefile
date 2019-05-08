@@ -10,7 +10,7 @@ SHELL := /bin/bash
 
 VPATH = src obj libft/includes include
 
-$(NAME): libft $(OBJ)
+$(NAME): $(OBJ)
 	@make -C mlx
 	@make -C libft
 	@$(CC) -o $(NAME) obj/* $(LFLAGS)
@@ -35,9 +35,6 @@ re: fclean all
 
 norm:
 	norminette src/. includes/.
-
-libft:
-	@./update.sh
 
 norme: norm
 

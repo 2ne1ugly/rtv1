@@ -1,0 +1,38 @@
+#sphere x,y,z radius color
+
+#sphere 1,0,2 .5 0xFF0000
+
+#plane x,y,z rot(x,y,z) color
+
+#plane 0,-2,0 0,0,0 0xA0A0A0
+
+#cylinder x,y,z rot(x,y,z) radius color
+
+#cylinder 2,0,0 0,0,0 .25 0xCCCCCC
+
+#cone x,y,z rot(x,y,z) color)
+
+#cone 0,0,4 0,0,0 .2614 0xFFFF00
+
+plane 0,-2,0 0,0,0 0xA0A0A0
+plane 0,2,0 3.14,0,0 0x505050
+plane 0,0,10 -0.7839,0,0 0x0000FF
+
+sphere 0,-1.5,0 .25 0xFF0000
+sphere 2,-2,0 .5 0xCCCCCC
+sphere 2,2,0 .5 0xCCCCCC
+sphere 2,-2,2 .5 0xCCCCCC
+sphere 2,2,2 .5 0xCCCCCC
+sphere -2,-2,0 .5 0xCCCCCC
+sphere -2,2,0 .5 0xCCCCCC
+sphere -2,-2,2 .5 0xCCCCCC
+sphere -2,2,2 .5 0xCCCCCC
+
+cylinder 2,0,0 0,0,0 .25 0xCCCCCC
+cylinder -2,0,0 0,0,0 .25 0xCCCCCC
+cylinder 2,0,2 0,0,0 .25 0xCCCCCC
+cylinder -2,0,2 0,0,0 .25 0xCCCCCC
+
+cone 0,0,4 0,0,0 .25 0xFFFF00
+cone -4,0,2 0,0,0 .25 0xFFFF00
+cone 4,0,2 0,0,0 .25 0xFFFF00

@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/24 12:01:14 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/08 12:09:04 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "rtv1.h"
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	t_app		*app;
 	t_light		*light;
@@ -22,7 +22,10 @@ int		main(void)
 	if (!init_app(&app))
 		return (0);
 	app->scene.objects = 0;
-	add_scene_sphere(app, &(t_vec){0, 0, 0, 1}, .25, 0xFF0000);
+	if (argc == 1)
+		parse_config(app, "config/config.rtv");
+	else
+		parse_config(app, argv[1]);
 	app->scene.lights = malloc(sizeof(t_light));
 	light = app->scene.lights;
 	light->pos = (t_vec){3, 1.5, -1, 1};

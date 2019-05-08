@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 17:25:10 by mchi              #+#    #+#             */
-/*   Updated: 2019/04/24 11:36:31 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/08 11:40:34 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int color)
 	cyl = malloc(sizeof(t_cyl));
 	tl_mat = translation_mat(pos);
 	vec_transform(&cyl->pos, &(t_vec){0, 0, 0, 1}, &tl_mat);
-	cyl->radius = .25;
+	cyl->radius = rot->w;
 	cyl->rot = *rot;
 	rot_mat = rotation_mat(rot->x, rot->y, rot->z);
 	vec_transform(&cyl->dir, &(t_vec){0, 1, 0, 0}, &rot_mat);
