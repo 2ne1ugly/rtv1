@@ -6,19 +6,13 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 12:04:24 by zfaria            #+#    #+#             */
-/*   Updated: 2019/05/08 12:09:58 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/08 12:24:05 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 #include <rtv1.h>
 #include <stdlib.h>
-
-int		del_tab(char **arr)
-{
-	free_tab(arr);
-	return (0);
-}
 
 int		parse_sphere(t_app *app, char **str)
 {

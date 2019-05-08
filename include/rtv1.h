@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/05/08 12:05:20 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/08 12:37:03 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,7 @@ double			ray_to_cylinder(t_ray *ray, t_obj *obj, t_intersect *out);
 double			ray_to_cone(t_ray *ray, t_obj *obj, t_intersect *out);
 
 int				key_event(int keycode, void *ptr);
+int				del_tab(char **arr);
 
 t_vec			find_cone_norm(t_cone *cone, t_vec pos);
 t_vec			find_cyl_norm(t_cyl	*cyl, t_vec pos);
@@ -199,10 +200,14 @@ void			add_scene_plane(t_app *app, t_vec *pos, t_vec *rot, int color);
 void			add_scene_cylinder(t_app *app, t_vec *pos, t_vec *rot, int c);
 void			add_scene_cone(t_app *app, t_vec *pos, t_vec *rot, int color);
 
+void			add_scene_light(t_app *app, t_vec *pos);
+
 void			parse_config(t_app *app, char *conf);
 int				parse_cylinder(t_app *app, char **str);
 int				parse_cone(t_app *app, char **str);
 int				parse_sphere(t_app *app, char **str);
 int				parse_plane(t_app *app, char **str);
+int				parse_light(t_app *app, char **str);
+int				parse_cam(t_app *app, char **str);
 
 #endif

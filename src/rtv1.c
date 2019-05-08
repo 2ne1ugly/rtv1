@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 03:13:29 by mchi              #+#    #+#             */
-/*   Updated: 2019/05/08 12:09:04 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/08 12:26:26 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,15 @@
 int		main(int argc, char **argv)
 {
 	t_app		*app;
-	t_light		*light;
 
 	if (!init_app(&app))
 		return (0);
 	app->scene.objects = 0;
+	app->scene.lights = 0;
 	if (argc == 1)
 		parse_config(app, "config/config.rtv");
 	else
 		parse_config(app, argv[1]);
-	app->scene.lights = malloc(sizeof(t_light));
-	light = app->scene.lights;
-	light->pos = (t_vec){3, 1.5, -1, 1};
-	light->next = NULL;
-	app->scene.lights->next = malloc(sizeof(t_light));
-	light = app->scene.lights->next;
-	light->pos = (t_vec){-3, 1.5, -1, 1};
-	light->next = NULL;
 	camera_update(&app->cam);
 	run_threads(app);
 	mlx_loop(app->mlx_handle);
