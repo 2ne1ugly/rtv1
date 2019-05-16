@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 11:14:10 by zfaria            #+#    #+#             */
-/*   Updated: 2019/05/08 12:39:39 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/16 15:13:15 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ void	parse_config(t_app *app, char *file)
 	int		fd;
 
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("No such file.\n");
+		exit(1);
+	}
 	while (get_next_line(fd, &str, 64))
 	{
 		split = ft_strsplit(str, ' ');
