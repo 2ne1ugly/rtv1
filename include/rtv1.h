@@ -6,7 +6,7 @@
 /*   By: zfaria <zfaria@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 23:01:58 by mchi              #+#    #+#             */
-/*   Updated: 2019/05/13 17:34:40 by zfaria           ###   ########.fr       */
+/*   Updated: 2019/05/16 15:08:01 by zfaria           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ int				parse_plane(t_app *app, char **str);
 int				parse_light(t_app *app, char **str);
 int				parse_cam(t_app *app, char **str);
 
-double 			ft_atof(char *str);
+double			ft_atof(char *str);
 long			ft_strtol(char *str);
 
 #endif
